@@ -29,6 +29,7 @@ inThisBuild(
       ("BUSL-1.1", url("https://raw.githubusercontent.com/akka/akka-persistence-r2dbc/main/LICENSE"))
     ), // FIXME change s/main/v1.1.0/ before releasing 1.1.0
     description := "An Akka Persistence backed by SQL database with R2DBC",
+    resolvers += "Akka library repository".at("https://repo.akka.io/maven"),
     // add snapshot repo when Akka version overriden
     resolvers ++=
       (if (System.getProperty("override.akka.version") != null)
@@ -41,7 +42,6 @@ def common: Seq[Setting[_]] =
     scalaVersion := Dependencies.Scala213,
     crossVersion := CrossVersion.binary,
     scalafmtOnCompile := true,
-    sonatypeProfileName := "com.lightbend",
     // Setting javac options in common allows IntelliJ IDEA to import them automatically
     Compile / javacOptions ++= Seq("-encoding", "UTF-8", "--release", "11"),
     Compile / scalacOptions ++= Seq("-release", "11"),
@@ -73,7 +73,23 @@ def common: Seq[Setting[_]] =
     mimaPreviousArtifacts :=
       Set(
         organization.value %% moduleName.value % previousStableVersion.value
-          .getOrElse(throw new Error("Unable to determine previous version"))))
+          .getOrElse(throw new Error("Unable to determine previous version")))
+  ) ++ publishingSettings
+
+private lazy val publishingSettings: Seq[Def.Setting[_]] = {
+  if (isSnapshot.value) {
+    // TODO
+    Seq()
+  } else {
+    publishTo := Some("Cloudsmith API".at("https://maven.cloudsmith.io/lightbend/akka/"))
+    val user = System.getProperty("PUBLISH_USER")
+    val password = System.getProperty("PUBLISH_PASSWORD")
+    if (user == null || password == null) {
+      throw new Exception("Publishing credentials expected in `PUBLISH_USER` and `PUBLISH_PASSWORD`.")
+    }
+    credentials ++= Seq(Credentials("Cloudsmith API", "maven.cloudsmith.io", user, password))
+  }
+}
 
 lazy val dontPublish = Seq(publish / skip := true, Compile / publishArtifact := false)
 

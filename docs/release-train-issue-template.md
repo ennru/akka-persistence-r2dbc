@@ -24,15 +24,15 @@ Key links:
 - [ ] Update the revision in Fossa in the Akka Group for the Akka umbrella version, e.g. `22.10`. Note that the revisions for the release is udpated by Akka Group > Projects > Edit. For recent dependency updates the Fossa validation can be triggered from the GitHub actions "Dependency License Scanning".
 - [ ] Wait until [main build finished](https://github.com/akka/akka-persistence-r2dbc/actions) after merging the latest PR
 - [ ] Update the [draft release](https://github.com/akka/akka-persistence-r2dbc/releases) with the next tag version `v$VERSION$`, title and release description. Use the `Publish release` button, which will create the tag.
-- [ ] Check that GitHub Actions release build has executed successfully (GitHub Actions will start a [CI build](https://github.com/akka/akka-persistence-r2dbc/actions) for the new tag and publish artifacts to Maven central via Sonatype)
+- [ ] Check that GitHub Actions release build has executed successfully (GitHub Actions will start a [CI build](https://github.com/akka/akka-persistence-r2dbc/actions) for the new tag and publish artifacts)
 
 ### Check availability
 
 - [ ] Check [API](https://doc.akka.io/api/akka-persistence-r2dbc/$VERSION$/) documentation
 - [ ] Check [reference](https://doc.akka.io/docs/akka-persistence-r2dbc/$VERSION$/) documentation. Check that the reference docs were deployed and show a version warning (see section below on how to fix the version warning).
-- [ ] Check the release on [Maven central](https://repo1.maven.org/maven2/com/lightbend/akka/akka-persistence-r2dbc_2.13/$VERSION$/)
+- [ ] Check the release in the [Akka repo](https://dl.cloudsmith.io/public/lightbend/maven-releases/maven/com/lightbend/akka/akka-persistence-r2dbc_2.13/$VERSION$/)
 
-### When everything is on maven central
+### When everything is published
   - [ ] Log into `gustav.akka.io` as `akkarepo` 
     - [ ] If this updates the `current` version, run `./update-akka-persistence-r2dbc-current-version.sh $VERSION$`
     - [ ] otherwise check changes and commit the new version to the local git repository
